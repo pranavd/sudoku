@@ -16,6 +16,13 @@ namespace SudokuGame
             Samurai
         }
 
+        public enum DeletionRules
+        {
+            RowRule,
+            ColumnRule,
+            InvertedRowRule,
+        }
+
         public static Dictionary<Difficulty, int> DifficultyUpperBoundMetrics = new Dictionary<Difficulty, int>()
         {
             {Difficulty.Easy,  250000},
