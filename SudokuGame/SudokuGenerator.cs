@@ -10,6 +10,9 @@ namespace SudokuGame
 {
     public class SudokuGenerator
     {
+        /// <summary>
+        /// initial board, for which valid sudoku will be generated through backtracking
+        /// </summary>
         private readonly int[,] _zeroBoard = new int[,]
         {
             {0,0,0,0,0,0,0,0,0 },
@@ -29,7 +32,7 @@ namespace SudokuGame
         public int[,] BaseBoard;
 
         /// <summary>
-        /// 
+        /// generates sudoku with difficulty level
         /// </summary>
         /// <param name="difficulty"></param>
         /// <returns></returns>
@@ -48,6 +51,11 @@ namespace SudokuGame
             throw new Exception("failed to generate...");
         }
 
+        /// <summary>
+        /// generates random set of indexes, which will be used to delete items from sudoku
+        /// </summary>
+        /// <param name="difficulty"></param>
+        /// <returns></returns>
         private IEnumerable<int[]> IndexesTobeDeleted(Common.Difficulty difficulty)
         {
             HashSet<int> set;
@@ -56,16 +64,16 @@ namespace SudokuGame
             switch (difficulty)
             {
                 case Common.Difficulty.Easy:
-                    set = GenerateNumberSet(47 / 3);
+                    set = GenerateNumberSet(55 / 3);
                     break;
                 case Common.Difficulty.Medium:
-                    set = GenerateNumberSet(50 / 3);
+                    set = GenerateNumberSet(60 / 3);
                     break;
                 case Common.Difficulty.Hard:
-                    set = GenerateNumberSet(53 / 2);
+                    set = GenerateNumberSet(65 / 2);
                     break;
                 case Common.Difficulty.Samurai:
-                    set = GenerateNumberSet(57 / 2);
+                    set = GenerateNumberSet(75 / 2);
                     break;
                 default:
                     throw new Exception("difficulty not specified...");
@@ -118,25 +126,37 @@ namespace SudokuGame
             return set;
         }
 
+        /// <summary>
+        /// applies deletions rules on the basis of difficulty of problem
+        /// </summary>
+        /// <param name="difficulty"></param>
+        /// <param name="indexes"></param>
+        /// <param name="board"></param>
         private void ApplyDifficultyLevel(Common.Difficulty difficulty, IEnumerable<int[]> indexes, ref int[,] board)
         {
             if (difficulty == Common.Difficulty.Easy || difficulty == Common.Difficulty.Medium)
             {
                 foreach (var index in indexes)
                 {
-                    ExecuteDeletionRule(new[] { Common.DeletionRules.RowRule, Common.DeletionRules.ColumnRule, Common.DeletionRules.InvertedRowRule }, index, ref board);
+                    ExecuteDeletionRule(new[] { Common.DeletionRules.RowRule, Common.DeletionRules.ColumnRule, Common.DeletionRules.DiagonalRule }, index, ref board);
                 }
             }
             else
             {
                 foreach (var index in indexes)
                 {
-                    ExecuteDeletionRule(new[] { Common.DeletionRules.InvertedRowRule }, index, ref board);
+                    ExecuteDeletionRule(new[] { Common.DeletionRules.DiagonalRule }, index, ref board);
                 }
             }
         }
 
-        private void ExecuteDeletionRule(Common.DeletionRules[] rules, int[] index, ref int[,] board)
+        /// <summary>
+        /// deletes values on the basis of rules provided
+        /// </summary>
+        /// <param name="rules"></param>
+        /// <param name="index"></param>
+        /// <param name="board"></param>
+        private void ExecuteDeletionRule(IEnumerable<Common.DeletionRules> rules, IReadOnlyList<int> index, ref int[,] board)
         {
             board[index[0], index[1]] = 0;
             foreach (var rule in rules)
@@ -150,7 +170,7 @@ namespace SudokuGame
                     case Common.DeletionRules.ColumnRule:
                         board[8 - index[0], index[1]] = 0;
                         break;
-                    case Common.DeletionRules.InvertedRowRule:
+                    case Common.DeletionRules.DiagonalRule:
                         board[8 - index[0], 8 - index[1]] = 0;
                         break;
                     default:

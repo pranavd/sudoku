@@ -20,7 +20,7 @@ namespace SudokuGame
         {
             RowRule,
             ColumnRule,
-            InvertedRowRule,
+            DiagonalRule,
         }
 
         public static Dictionary<Difficulty, int> DifficultyUpperBoundMetrics = new Dictionary<Difficulty, int>()
