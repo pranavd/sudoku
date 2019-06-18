@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SudokuEngine;
 
 namespace SudokuGame
 {
@@ -21,7 +22,7 @@ namespace SudokuGame
 
         public void InitialSteps()
         {
-            txtInput.Text = "Path for sudoku input file...";
+            txtInput.Text = @"Path for sudoku input file...";
             cmbDifficulty.DataSource = Enum.GetValues(typeof(Common.Difficulty));
         }
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace SudokuGame
+namespace SudokuEngine
 {
     public static class Common
     {
@@ -14,13 +10,6 @@ namespace SudokuGame
             Medium,
             Hard,
             Samurai
-        }
-
-        public enum DeletionRules
-        {
-            RowRule,
-            ColumnRule,
-            DiagonalRule,
         }
 
         public static Dictionary<Difficulty, int> DifficultyUpperBoundMetrics = new Dictionary<Difficulty, int>()

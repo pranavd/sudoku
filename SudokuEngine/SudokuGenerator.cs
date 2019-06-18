@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SudokuGame
+namespace SudokuEngine
 {
     /// <summary>
     /// generates a valid sudoku with unique solution

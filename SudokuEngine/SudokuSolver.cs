@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SudokuGame
+namespace SudokuEngine
 {
     /// <summary>
     /// checks if sudoku is valid and finds it unique solution

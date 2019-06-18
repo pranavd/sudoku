@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SudokuGame;
+using SudokuEngine;
 
 namespace TestProject
 {
@@ -43,52 +43,18 @@ namespace TestProject
                 //check samurai level
                 var samuraiSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Samurai]);
                 Assert.IsNotNull(samuraiSolved);
-                if (solver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
-                {
-                    Assert.IsTrue(true, "samurai problem");
-                }
-                else
-                {
-                    //Assert.Inconclusive("not really a samurai problem");
-                }
 
                 //check hard level
                 var hardSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Hard]);
                 Assert.IsNotNull(hardSolved);
-                if (solver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] &&
-                    solver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
-                {
-                    Assert.IsTrue(true, "hard problem");
-                }
-                else
-                {
-                    //Assert.Inconclusive("not really a hard problem");
-                }
 
                 //check medium level
                 var mediumSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Medium]);
                 Assert.IsNotNull(mediumSolved);
-                if (solver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] && solver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
-                {
-                    Assert.IsTrue(true, "medium problem");
-                }
-                else
-                {
-                    //Assert.Inconclusive("not really a medium problem");
-                }
 
                 //check medium level
-                var easySolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Medium]);
+                var easySolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Easy]);
                 Assert.IsNotNull(easySolved);
-                if (solver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy])
-                {
-
-                    Assert.IsTrue(true, "easy problem");
-                }
-                else
-                {
-                    //Assert.Inconclusive("not really a easy problem");
-                }
 
             }
             catch (Exception ex)

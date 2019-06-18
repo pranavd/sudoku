@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SudokuGame
+namespace SudokuEngine
 {
     /// <summary>
     /// implements difficulty levels
@@ -50,13 +47,16 @@ namespace SudokuGame
             {
                 switch (rule)
                 {
+                    //deletes at mirror position in same row
                     case DeletionRules.RowRule:
                         board[index[0], 8 - index[1]] = 0;
                         Debug.WriteLine($"({index[0]}, {index[1]}) --> ({index[0]}, {8 - index[1]})");
                         break;
+                    //deletes at mirror position in same column
                     case DeletionRules.ColumnRule:
                         board[8 - index[0], index[1]] = 0;
                         break;
+                    //deletes at mirror position across diagonal
                     case DeletionRules.DiagonalRule:
                         board[8 - index[0], 8 - index[1]] = 0;
                         break;

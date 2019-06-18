@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SudokuGame\SudokuGame.csproj">
-      <Project>{51cea25b-0608-45d1-acc7-653924561971}</Project>
-      <Name>SudokuGame</Name>
+    <ProjectReference Include="..\SudokuEngine\SudokuEngine.csproj">
+      <Project>{3E1E1CD2-45DB-4180-A225-BB5F9373D953}</Project>
+      <Name>SudokuEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
