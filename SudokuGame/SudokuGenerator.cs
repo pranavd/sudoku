@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SudokuGame
 {
+    /// <summary>
+    /// generates a valid sudoku with unique solution
+    /// </summary>
     public class SudokuGenerator
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace SudokuGame
         public int[,] BaseBoard;
 
         /// <summary>
-        /// generates sudoku with difficulty level
+        /// generates sudoku with specified difficulty level
         /// </summary>
         /// <param name="difficulty"></param>
         /// <returns></returns>
@@ -41,14 +44,18 @@ namespace SudokuGame
             var sudokuSolver = new SudokuSolver();
             BaseBoard = sudokuSolver.SolveSudoku(_zeroBoard);
 
-            if (BaseBoard != null)
-            {
-                var indexes = IndexesTobeDeleted(difficulty);
-                ApplyDifficultyLevel(difficulty, indexes, ref BaseBoard);
+            if (BaseBoard == null) throw new Exception("failed to generate...");
+            var indexes = IndexesTobeDeleted(difficulty).ToList();
 
-                return BaseBoard;
+            var difficultyGenerator = new DifficultyGenerator();
+
+            foreach (var index in indexes)
+            {
+                //applying difficulty levels  
+                difficultyGenerator.MakeItDifficultBy(difficulty, index, ref BaseBoard);
             }
-            throw new Exception("failed to generate...");
+
+            return BaseBoard;
         }
 
         /// <summary>
@@ -124,59 +131,6 @@ namespace SudokuGame
             }
 
             return set;
-        }
-
-        /// <summary>
-        /// applies deletions rules on the basis of difficulty of problem
-        /// </summary>
-        /// <param name="difficulty"></param>
-        /// <param name="indexes"></param>
-        /// <param name="board"></param>
-        private void ApplyDifficultyLevel(Common.Difficulty difficulty, IEnumerable<int[]> indexes, ref int[,] board)
-        {
-            if (difficulty == Common.Difficulty.Easy || difficulty == Common.Difficulty.Medium)
-            {
-                foreach (var index in indexes)
-                {
-                    ExecuteDeletionRule(new[] { Common.DeletionRules.RowRule, Common.DeletionRules.ColumnRule, Common.DeletionRules.DiagonalRule }, index, ref board);
-                }
-            }
-            else
-            {
-                foreach (var index in indexes)
-                {
-                    ExecuteDeletionRule(new[] { Common.DeletionRules.DiagonalRule }, index, ref board);
-                }
-            }
-        }
-
-        /// <summary>
-        /// deletes values on the basis of rules provided
-        /// </summary>
-        /// <param name="rules"></param>
-        /// <param name="index"></param>
-        /// <param name="board"></param>
-        private void ExecuteDeletionRule(IEnumerable<Common.DeletionRules> rules, IReadOnlyList<int> index, ref int[,] board)
-        {
-            board[index[0], index[1]] = 0;
-            foreach (var rule in rules)
-            {
-                switch (rule)
-                {
-                    case Common.DeletionRules.RowRule:
-                        board[index[0], 8 - index[1]] = 0;
-                        Debug.WriteLine($"({index[0]}, {index[1]}) --> ({index[0]}, {8 - index[1]})");
-                        break;
-                    case Common.DeletionRules.ColumnRule:
-                        board[8 - index[0], index[1]] = 0;
-                        break;
-                    case Common.DeletionRules.DiagonalRule:
-                        board[8 - index[0], 8 - index[1]] = 0;
-                        break;
-                    default:
-                        throw new Exception($"Failed to apply rule {rule.ToString()}");
-                }
-            }
         }
     }
 }

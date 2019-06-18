@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace SudokuGame
 {
+    /// <summary>
+    /// checks if sudoku is valid and finds it unique solution
+    /// </summary>
     public class SudokuSolver
     {
         private int[,] _sudokuBoard;
@@ -75,11 +78,6 @@ namespace SudokuGame
             int row, column;
             if (AnyEmptyCell(out row, out column))
             {
-                if (row == 0 && column == 8)
-                {
-
-                }
-
                 for (var value = 1; value <= 9; value++)
                 {
                     if (IsValidChoice(value, row, column))
