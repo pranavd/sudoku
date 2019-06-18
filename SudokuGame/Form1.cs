@@ -46,6 +46,7 @@ namespace SudokuGame
         {
             try
             {
+                btnSolve.Enabled = false;
                 var sudokuSolver = new SudokuSolver();
                 var solvedBoard = sudokuSolver.SolveSudoku(txtInput.Text.Trim());
 
@@ -59,8 +60,10 @@ namespace SudokuGame
                         {
                             txtOutput.AppendText(solvedBoard[row, column].ToString());
                         }
+
                         txtOutput.AppendText("\r\n");
                     }
+
                     txtOutput.AppendText("\r\n\r\n");
 
                     //displaying recursion depth, using recursion depth for judging difficulty
@@ -72,17 +75,24 @@ namespace SudokuGame
                     else
                     {
                         //hard level
-                        if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] && sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
+                        if (sudokuSolver.RecursionDepth >
+                            Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] &&
+                            sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
                         {
                             txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Hard");
                         }
                         else
                         {
                             //medium level
-                            if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] && sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
+                            if (sudokuSolver.RecursionDepth >
+                                Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] &&
+                                sudokuSolver.RecursionDepth <=
+                                Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
                             {
-                                txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Medium");
+                                txtOutput.AppendText(
+                                    $"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Medium");
                             }
+
                             //easy level
                             txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Easy");
                         }
@@ -92,6 +102,10 @@ namespace SudokuGame
             catch (Exception ex)
             {
                 txtOutput.Text = ex.Message;
+            }
+            finally
+            {
+                btnSolve.Enabled = true;
             }
         }
 
@@ -104,6 +118,7 @@ namespace SudokuGame
         {
             try
             {
+                btnGenerate.Enabled = false;
                 var generator = new SudokuGenerator();
                 var generatedBoard = generator.Generate((Common.Difficulty)cmbDifficulty.SelectedItem);
 
@@ -114,13 +129,19 @@ namespace SudokuGame
                     {
                         txtOutput.AppendText(generatedBoard[row, column].ToString());
                     }
+
                     txtOutput.AppendText("\r\n");
                 }
+
                 txtOutput.AppendText("\r\n\r\n");
             }
             catch (Exception ex)
             {
                 txtOutput.Text = ex.Message;
+            }
+            finally
+            {
+                btnGenerate.Enabled = true;
             }
         }
     }
