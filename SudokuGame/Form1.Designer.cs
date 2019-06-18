@@ -82,7 +82,7 @@
             this.btnSolve.TabIndex = 1;
             this.btnSolve.Text = "Solve";
             this.btnSolve.UseVisualStyleBackColor = true;
-            this.btnSolve.Click += new System.EventHandler(this.button1_Click);
+            this.btnSolve.Click += new System.EventHandler(this.btnSolve_Click);
             // 
             // txtInput
             // 
@@ -91,8 +91,8 @@
             this.txtInput.Name = "txtInput";
             this.txtInput.Size = new System.Drawing.Size(232, 22);
             this.txtInput.TabIndex = 0;
-            this.txtInput.Enter += new System.EventHandler(this.textBox1_Enter);
-            this.txtInput.Leave += new System.EventHandler(this.textBox1_Leave);
+            this.txtInput.Enter += new System.EventHandler(this.txtInput_Enter);
+            this.txtInput.Leave += new System.EventHandler(this.txtInput_Leave);
             // 
             // txtOutput
             // 

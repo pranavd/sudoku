@@ -15,21 +15,8 @@ namespace SudokuGame
         private int[,] _sudokuBoard;
         private int _maxRows;
         private int _maxColumns;
-        public int RecursionDepth = 0;
-        public int[,] SolveSudoku(string inputFile)
-        {
-            ReadInputs(inputFile);
-
-            if (_sudokuBoard == null) throw new Exception("failed to fill sudoku");
-            _maxRows = _sudokuBoard.GetLength(0);
-            _maxColumns = _sudokuBoard.GetLength(1);
-
-            if (Solve())
-            {
-                return _sudokuBoard;
-            }
-            throw new Exception("failed to solve sudoku");
-        }
+        public int RecursionDepth;
+        public Common.Difficulty Difficulty;
 
         public int[,] SolveSudoku(int[,] inputBoard)
         {
@@ -37,44 +24,21 @@ namespace SudokuGame
             _maxRows = _sudokuBoard.GetLength(0);
             _maxColumns = _sudokuBoard.GetLength(1);
 
-            if (Solve())
+            if (Solve(ref RecursionDepth))
             {
+                EvaluateDifficulty();
                 return _sudokuBoard;
             }
             throw new Exception("failed to solve sudoku");
         }
 
         /// <summary>
-        /// input file should contain 0 for empty cells
-        /// </summary>
-        /// <param name="filePath"></param>
-        private void ReadInputs(string filePath)
-        {
-            var rowCount = 0;
-            var lines = File.ReadAllLines(filePath);
-            _sudokuBoard = new int[lines.Length, lines.Length];
-
-            foreach (var line in lines)
-            {
-                var columnCount = 0;
-                var numbers = line.ToCharArray();
-
-                foreach (var number in numbers)
-                {
-                    _sudokuBoard[rowCount, columnCount] = int.Parse(number.ToString());
-                    columnCount++;
-                }
-                rowCount++;
-            }
-        }
-
-        /// <summary>
         /// solving problem
         /// </summary>
-        private bool Solve()
+        /// <param name="recursionDepth">holds the value for recursion depth</param>
+        /// <returns></returns>
+        private bool Solve(ref int recursionDepth)
         {
-            //measures recursion depth for judging difficulty
-            RecursionDepth++;
             int row, column;
             if (AnyEmptyCell(out row, out column))
             {
@@ -83,7 +47,8 @@ namespace SudokuGame
                     if (IsValidChoice(value, row, column))
                     {
                         _sudokuBoard[row, column] = value;
-                        if (Solve())
+                        recursionDepth++;
+                        if (Solve(ref recursionDepth))
                         {
                             return true;
                         }
@@ -167,6 +132,37 @@ namespace SudokuGame
             }
 
             return true;
+        }
+
+        private void EvaluateDifficulty()
+        {
+            if (RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
+            {
+                Difficulty = Common.Difficulty.Samurai;
+            }
+            else
+            {
+                if (RecursionDepth >
+                    Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] &&
+                    RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
+                {
+                    Difficulty = Common.Difficulty.Hard;
+                }
+                else
+                {
+                    if (RecursionDepth >
+                        Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] &&
+                        RecursionDepth <=
+                        Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
+                    {
+                        Difficulty = Common.Difficulty.Medium;
+                    }
+                    else
+                    {
+                        Difficulty = Common.Difficulty.Easy;
+                    }
+                }
+            }
         }
     }
 }

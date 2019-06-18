@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,12 +25,12 @@ namespace SudokuGame
             cmbDifficulty.DataSource = Enum.GetValues(typeof(Common.Difficulty));
         }
 
-        private void textBox1_Enter(object sender, EventArgs e)
+        private void txtInput_Enter(object sender, EventArgs e)
         {
             txtInput.Text = string.Empty;
         }
 
-        private void textBox1_Leave(object sender, EventArgs e)
+        private void txtInput_Leave(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtInput.Text))
             {
@@ -42,13 +43,13 @@ namespace SudokuGame
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSolve_Click(object sender, EventArgs e)
         {
             try
             {
                 btnSolve.Enabled = false;
                 var sudokuSolver = new SudokuSolver();
-                var solvedBoard = sudokuSolver.SolveSudoku(txtInput.Text.Trim());
+                var solvedBoard = sudokuSolver.SolveSudoku(ReadInputs(txtInput.Text.Trim()));
 
                 //displaying solved sudoku
                 if (solvedBoard != null)
@@ -60,43 +61,10 @@ namespace SudokuGame
                         {
                             txtOutput.AppendText(solvedBoard[row, column].ToString());
                         }
-
                         txtOutput.AppendText("\r\n");
                     }
-
                     txtOutput.AppendText("\r\n\r\n");
-
-                    //displaying recursion depth, using recursion depth for judging difficulty
-                    //samurai level
-                    if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
-                    {
-                        txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Samurai");
-                    }
-                    else
-                    {
-                        //hard level
-                        if (sudokuSolver.RecursionDepth >
-                            Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] &&
-                            sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
-                        {
-                            txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Hard");
-                        }
-                        else
-                        {
-                            //medium level
-                            if (sudokuSolver.RecursionDepth >
-                                Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] &&
-                                sudokuSolver.RecursionDepth <=
-                                Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
-                            {
-                                txtOutput.AppendText(
-                                    $"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Medium");
-                            }
-
-                            //easy level
-                            txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Easy");
-                        }
-                    }
+                    txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : {sudokuSolver.Difficulty.ToString()}");
                 }
             }
             catch (Exception ex)
@@ -143,6 +111,33 @@ namespace SudokuGame
             {
                 btnGenerate.Enabled = true;
             }
+        }
+
+        /// <summary>
+        /// input file should contain 0 for empty cells
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        private int[,] ReadInputs(string filePath)
+        {
+            var rowCount = 0;
+            var lines = File.ReadAllLines(filePath);
+            var board = new int[lines.Length, lines.Length];
+
+            foreach (var line in lines)
+            {
+                var columnCount = 0;
+                var numbers = line.ToCharArray();
+
+                foreach (var number in numbers)
+                {
+                    board[rowCount, columnCount] = int.Parse(number.ToString());
+                    columnCount++;
+                }
+                rowCount++;
+            }
+
+            return board;
         }
     }
 }
