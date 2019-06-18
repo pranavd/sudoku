@@ -9,9 +9,9 @@ namespace SudokuGame
 {
     public class SudokuSolver
     {
-        private static int[,] _sudokuBoard;
-        private static int _maxRows;
-        private static int _maxColumns;
+        private int[,] _sudokuBoard;
+        private int _maxRows;
+        private int _maxColumns;
         public int RecursionDepth = 0;
         public int[,] SolveSudoku(string inputFile)
         {

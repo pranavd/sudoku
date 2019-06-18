@@ -21,7 +21,7 @@ namespace SudokuGame
         public void InitialSteps()
         {
             txtInput.Text = "Path for sudoku input file...";
-            cmbDifficulty.DataSource = Enum.GetValues(typeof(SudokuGenerator.Difficulty));
+            cmbDifficulty.DataSource = Enum.GetValues(typeof(Common.Difficulty));
         }
 
         private void textBox1_Enter(object sender, EventArgs e)
@@ -65,21 +65,21 @@ namespace SudokuGame
 
                     //displaying recursion depth, using recursion depth for judging difficulty
                     //samurai level
-                    if (sudokuSolver.RecursionDepth > 1000000)
+                    if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
                     {
                         txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Samurai");
                     }
                     else
                     {
                         //hard level
-                        if (sudokuSolver.RecursionDepth > 500000)
+                        if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium] && sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Hard])
                         {
                             txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Hard");
                         }
                         else
                         {
                             //medium level
-                            if (sudokuSolver.RecursionDepth > 250000)
+                            if (sudokuSolver.RecursionDepth > Common.DifficultyUpperBoundMetrics[Common.Difficulty.Easy] && sudokuSolver.RecursionDepth <= Common.DifficultyUpperBoundMetrics[Common.Difficulty.Medium])
                             {
                                 txtOutput.AppendText($"Recursion depth: {sudokuSolver.RecursionDepth.ToString()} : Medium");
                             }
@@ -105,7 +105,7 @@ namespace SudokuGame
             try
             {
                 var generator = new SudokuGenerator();
-                var generatedBoard = generator.Generate((SudokuGenerator.Difficulty)cmbDifficulty.SelectedItem);
+                var generatedBoard = generator.Generate((Common.Difficulty)cmbDifficulty.SelectedItem);
 
                 txtOutput.Text = string.Empty;
                 for (var row = 0; row < generatedBoard.GetLength(0); row++)

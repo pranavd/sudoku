@@ -9,7 +9,7 @@ namespace SudokuGame
 {
     public class SudokuGenerator
     {
-        private int[,] zeroBoard = new int[,]
+        private readonly int[,] _zeroBoard = new int[,]
         {
             {0,0,0,0,0,0,0,0,0 },
             {0,0,0,0,0,0,0,0,0 },
@@ -22,20 +22,22 @@ namespace SudokuGame
             {0,0,0,0,0,0,0,0,0 }
         };
 
-        public enum Difficulty
-        {
-            Easy,
-            Medium,
-            Hard,
-            Samurai
-        }
+        /// <summary>
+        /// Represents desired solution
+        /// </summary>
+        public int[,] BaseBoard;
 
-        public int[,] Generate(Difficulty difficulty)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="difficulty"></param>
+        /// <returns></returns>
+        public int[,] Generate(Common.Difficulty difficulty)
         {
             var sudokuSolver = new SudokuSolver();
-            var solvedBoard = sudokuSolver.SolveSudoku(zeroBoard);
+            BaseBoard = sudokuSolver.SolveSudoku(_zeroBoard);
 
-            if (solvedBoard != null)
+            if (BaseBoard != null)
             {
                 var randomNumbers = GenerateRandomNumbers(difficulty);
 
@@ -48,36 +50,36 @@ namespace SudokuGame
                         var row = int.Parse(splits[0].ToString());
                         var column = int.Parse(splits[1].ToString());
 
-                        solvedBoard[row, column] = 0;
+                        BaseBoard[row, column] = 0;
                     }
                     else
                     {
-                        solvedBoard[0, int.Parse(splits[0].ToString())] = 0;
+                        BaseBoard[0, int.Parse(splits[0].ToString())] = 0;
                     }
                 }
 
-                return solvedBoard;
+                return BaseBoard;
             }
             throw new Exception("failed to generate...");
         }
 
-        private List<int> GenerateRandomNumbers(Difficulty difficulty)
+        private IEnumerable<int> GenerateRandomNumbers(Common.Difficulty difficulty)
         {
             HashSet<int> set;
 
             switch (difficulty)
             {
-                case Difficulty.Easy:
-                    set = AddToSet(50);
+                case Common.Difficulty.Easy:
+                    set = GenerateNumberSet(50);
                     break;
-                case Difficulty.Medium:
-                    set = AddToSet(55);
+                case Common.Difficulty.Medium:
+                    set = GenerateNumberSet(55);
                     break;
-                case Difficulty.Hard:
-                    set = AddToSet(60);
+                case Common.Difficulty.Hard:
+                    set = GenerateNumberSet(60);
                     break;
-                case Difficulty.Samurai:
-                    set = AddToSet(65);
+                case Common.Difficulty.Samurai:
+                    set = GenerateNumberSet(65);
                     break;
                 default:
                     throw new Exception("difficulty not specified...");
@@ -86,7 +88,7 @@ namespace SudokuGame
             return set.ToList();
         }
 
-        private HashSet<int> AddToSet(int setCount)
+        private HashSet<int> GenerateNumberSet(int setCount)
         {
             var set = new HashSet<int>();
 
