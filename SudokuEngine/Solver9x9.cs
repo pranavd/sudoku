@@ -36,7 +36,7 @@ namespace SudokuEngine
                 EvaluateDifficulty();
                 return _sudokuBoard;
             }
-            throw new Exception("failed to solve sudoku");
+            throw new Exception("invalid sudoku");
         }
 
         /// <summary>
