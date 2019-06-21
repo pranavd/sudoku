@@ -6,8 +6,11 @@ using SudokuEngine;
 
 namespace TestProject
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [TestClass]
-    public class SudokuTest
+    public class Sudoku9X9Test
     {
         private Dictionary<Common.Difficulty, int[,]> _sudokus;
 
@@ -19,8 +22,8 @@ namespace TestProject
         {
             try
             {
-                var solver = new SudokuSolver();
-                var solved = solver.SolveSudoku(_sudokus[Common.Difficulty.Samurai]);
+                var solver = SudokuSolver.GetSolver(_sudokus[Common.Difficulty.Samurai]);
+                var solved = solver.Solve();
 
                 Assert.IsNotNull(solved);
             }
@@ -38,22 +41,20 @@ namespace TestProject
         {
             try
             {
-                var solver = new SudokuSolver();
-
                 //check samurai level
-                var samuraiSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Samurai]);
+                var samuraiSolved = SudokuSolver.GetSolver(_sudokus[Common.Difficulty.Samurai]).Solve();
                 Assert.IsNotNull(samuraiSolved);
 
                 //check hard level
-                var hardSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Hard]);
+                var hardSolved = SudokuSolver.GetSolver(_sudokus[Common.Difficulty.Hard]).Solve();
                 Assert.IsNotNull(hardSolved);
 
                 //check medium level
-                var mediumSolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Medium]);
+                var mediumSolved = SudokuSolver.GetSolver(_sudokus[Common.Difficulty.Medium]).Solve();
                 Assert.IsNotNull(mediumSolved);
 
-                //check medium level
-                var easySolved = solver.SolveSudoku(_sudokus[Common.Difficulty.Easy]);
+                //check easy level
+                var easySolved = SudokuSolver.GetSolver(_sudokus[Common.Difficulty.Easy]).Solve();
                 Assert.IsNotNull(easySolved);
 
             }
@@ -71,41 +72,42 @@ namespace TestProject
         {
             try
             {
-                var generator = new SudokuGenerator();
-                var solver = new SudokuSolver();
-
                 #region samurai level
                 {
-                    var unsolvedBoard = generator.Generate(Common.Difficulty.Samurai);
+                    var generator = SudokuGenerator.GetGenerator(9, Common.Difficulty.Samurai);
+                    var unsolvedBoard = generator.Generate();
                     Assert.IsNotNull(unsolvedBoard);
-                    var solvedBoard = solver.SolveSudoku(unsolvedBoard);
+                    var solvedBoard = SudokuSolver.GetSolver(unsolvedBoard).Solve();
                     Assert.AreEqual(generator.BaseBoard, solvedBoard);
                 }
                 #endregion
 
                 #region hard level
                 {
-                    var unsolvedBoard = generator.Generate(Common.Difficulty.Hard);
+                    var generator = SudokuGenerator.GetGenerator(9, Common.Difficulty.Hard);
+                    var unsolvedBoard = generator.Generate();
                     Assert.IsNotNull(unsolvedBoard);
-                    var solvedBoard = solver.SolveSudoku(unsolvedBoard);
+                    var solvedBoard = SudokuSolver.GetSolver(unsolvedBoard).Solve();
                     Assert.AreEqual(generator.BaseBoard, solvedBoard);
                 }
                 #endregion
 
                 #region medium level
                 {
-                    var unsolvedBoard = generator.Generate(Common.Difficulty.Medium);
+                    var generator = SudokuGenerator.GetGenerator(9, Common.Difficulty.Medium);
+                    var unsolvedBoard = generator.Generate();
                     Assert.IsNotNull(unsolvedBoard);
-                    var solvedBoard = solver.SolveSudoku(unsolvedBoard);
+                    var solvedBoard = SudokuSolver.GetSolver(unsolvedBoard).Solve();
                     Assert.AreEqual(generator.BaseBoard, solvedBoard);
                 }
                 #endregion
 
                 #region easy level
                 {
-                    var unsolvedBoard = generator.Generate(Common.Difficulty.Easy);
+                    var generator = SudokuGenerator.GetGenerator(9, Common.Difficulty.Easy);
+                    var unsolvedBoard = generator.Generate();
                     Assert.IsNotNull(unsolvedBoard);
-                    var solvedBoard = solver.SolveSudoku(unsolvedBoard);
+                    var solvedBoard = SudokuSolver.GetSolver(unsolvedBoard).Solve();
                     Assert.AreEqual(generator.BaseBoard, solvedBoard);
                 }
                 #endregion

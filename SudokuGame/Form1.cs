@@ -49,8 +49,8 @@ namespace SudokuGame
             try
             {
                 btnSolve.Enabled = false;
-                var sudokuSolver = new SudokuSolver();
-                var solvedBoard = sudokuSolver.SolveSudoku(ReadInputs(txtInput.Text.Trim()));
+                var sudokuSolver = SudokuSolver.GetSolver(ReadInputs(txtInput.Text.Trim()));
+                var solvedBoard = sudokuSolver.Solve();
 
                 //displaying solved sudoku
                 if (solvedBoard != null)
@@ -88,8 +88,8 @@ namespace SudokuGame
             try
             {
                 btnGenerate.Enabled = false;
-                var generator = new SudokuGenerator();
-                var generatedBoard = generator.Generate((Common.Difficulty)cmbDifficulty.SelectedItem);
+                var generator = SudokuGenerator.GetGenerator(9, (Common.Difficulty)cmbDifficulty.SelectedItem);
+                var generatedBoard = generator.Generate();
 
                 txtOutput.Text = string.Empty;
                 for (var row = 0; row < generatedBoard.GetLength(0); row++)
